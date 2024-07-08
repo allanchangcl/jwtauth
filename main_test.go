@@ -20,8 +20,9 @@ func TestMain(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	h := handler{}
-	h.helloWorld(c)
+	// h := handler{}
+	// h.helloWorld(c)
+	helloWorld(c)
 
 	assert.Equal(t, http.StatusOK, rec.Code)
 }

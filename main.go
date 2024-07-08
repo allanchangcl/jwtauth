@@ -1,28 +1,20 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/allanchangcl/jwtauth/database"
+	"github.com/allanchangcl/jwtauth/routes"
+
 	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/labstack/echo/v4"
 )
 
-// type handler struct{}
-
-// Handler
-// func (h *handler) helloWorld(c echo.Context) error {
-func helloWorld(c echo.Context) error {
-	// return c.String(http.StatusBadRequest, "Hello, World!")
-	return c.String(http.StatusOK, "Hello, World!")
-}
-
 func main() {
-	database.Connection()
+	database.Connect()
 
 	e := echo.New()
-	// h := &handler{}
-	e.GET("/", helloWorld)
+	routes.Setup(e)
+
+	routes.Setup(e)
 	e.Logger.Fatal(e.Start(":1323"))
 }
