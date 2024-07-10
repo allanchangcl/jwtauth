@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/allanchangcl/jwtauth/database"
-	"github.com/allanchangcl/jwtauth/routes"
+	"github.com/allanchangcl/jwtauth/handlers"
 
 	_ "github.com/mattn/go-sqlite3"
 
@@ -13,8 +13,7 @@ func main() {
 	database.Connect()
 
 	e := echo.New()
-	routes.Setup(e)
+	handlers.Setup(e)
 
-	routes.Setup(e)
 	e.Logger.Fatal(e.Start(":1323"))
 }
