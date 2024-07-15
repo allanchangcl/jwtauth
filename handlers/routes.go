@@ -6,4 +6,7 @@ import (
 
 func Setup(e *echo.Echo) {
 	e.GET("/", Index)
+
+	// authentication
+	// e.POST("/api", Register)
 }

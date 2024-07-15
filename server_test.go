@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMain(t *testing.T) {
+func TestServer(t *testing.T) {
 	// req, err := http.NewRequest("GET", "/", nil)
 	// if err != nil {
 	//   t.Fatal(err)

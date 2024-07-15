@@ -6,7 +6,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Register(e echo.Context) error {
+type Auth struct{}
+
+func (a *Auth) Register(e echo.Context) error {
 	// return e.String(http.StatusOK, "Register")
 	return e.String(http.StatusOK, "Register")
 }

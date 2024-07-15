@@ -9,16 +9,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestController(t *testing.T) {
+func TestIndex(t *testing.T) {
 	e := echo.New()
-	req := httptest.NewRequest(http.MethodPost, "/register", nil)
+	req := httptest.NewRequest(http.MethodPost, "/fdfdfdfdfregister", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	// h := handler{}
-	// h.helloWorld(c)
-	// HelloWorld(c)
-	Register(c)
+	auth := Auth{}
+	// auth.Register(c)
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	// Assertions
+	if assert.NoError(t, auth.Register(c)) {
+		assert.Equal(t, http.StatusCreated, rec.Code)
+	}
 }
