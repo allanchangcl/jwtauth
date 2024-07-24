@@ -25,11 +25,11 @@ type application struct {
 	config config
 }
 
-// func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
-// 	fmt.Fprintln(w, "status: available")
-// 	// fmt.Fprintf(w, "environment: %s\n", app.config.env)
-// 	fmt.Fprintf(w, "version: %s\n", version)
-// }
+func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "status: available")
+	// fmt.Fprintf(w, "environment: %s\n", app.config.env)
+	fmt.Fprintf(w, "version: %s\n", version)
+}
 
 //	func stripSlashes(next http.Handler) http.Handler {
 //	  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -79,32 +79,23 @@ func main() {
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
 	// Declare an instance of the application struct, containing the config struct and the logger.
-	// app := &application{
-	// 	config: cfg,
-	// 	logger: logger,
-	// }
+	app := &application{
+		config: cfg,
+		logger: logger,
+	}
 
 	// Declare a new servemux and add a /v1/healthcheck route which dispatches requests
 	// to the healthcheckHandler method.
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/sign-in", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Customer Sign in")
-	})
-	// mux.Handle("/customer/", http.StripPrefix("/customer", mux))
-	mux.Handle("/customer/", http.StripPrefix("/customer", stripSlash(mux)))
-
-	// finalHandler := http.HandleFunc(app.healthcheckHandler)
-	// mux.HandleFunc("/v1/healthcheck", app.healthcheckHandler)
-	// mux.HandleFunc("/v1/healthcheck/", http.StripPrefix("/v1/healthcheck", app.healthcheckHandler))
-	// mux.HandleFunc("/v1/healthcheck", stripSlash(healthcheckHandler))
-	// mux.Handle("/v1/healthcheck", stripSlash(app.healthcheckHandler))
+	// HandleFunc expects a function where Handle expects a Handler interface.
+	mux.HandleFunc("/v1/healthcheck", app.healthcheckHandler)
 
 	// Declare an HTTP server with some sensitive timeout settings, which listens on the
 	// on the post provided in the config struct and uses the servemux we created above.
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.port),
-		Handler:      mux,
+		Handler:      stripSlash(mux),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
