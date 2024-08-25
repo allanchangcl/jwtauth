@@ -1,53 +1,38 @@
 package main
 
 import (
-	"log"
+	"io"
 	"net/http"
-	"os"
+	"strings"
 	"testing"
 )
 
 func TestMain(t *testing.T) {
-	// expected := "status: available"
-	// defer os.Unsetenv("ES_")
-	// os.Setenv("ES_URL", "localhost:4000/v1/healthcheck")
+	expected := "status: available"
+	var responseFirstLine string
 
-	// req := httptest.NewRequest(http.MethodGet, "localhost:4000/v1/healthcheck", nil)
-
-	// Create a response recorder so you can inspect the response
-	// w := httptest.NewRecorder()
-	// healthcheckHandler(w, req)
-	// res := w.Result()
-	// defer res.Body.Close()
-
-	// Perform the request
-	// req.ServeHTTP(w, req)
-	// fmt.Println(res)
-
-	// data, err := io.ReadAll(res.Body)
-
-	// fmt.Println(req)
-
-	// if string(data) != expected {
-	// 	t.Errorf("expected ABC got %v", string(data))
-	// }
 	req, err := http.NewRequest(http.MethodGet, "http://localhost:4000/v1/healthcheck", nil)
 	if err != nil {
-		log.Printf("error making http request: %s\n", err)
-		os.Exit(1)
+		t.Errorf("error making http request: %s\n", err)
 	}
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Printf("client: error making http request: %s\n", err)
-		os.Exit(1)
+		t.Errorf("client: error making http request: %s\n", err)
 	}
 
-	// fmt.Printf("client: got response!\n")
-	// fmt.Printf("client: status code: %d\n", res.StatusCode)
-	log.Printf("client: got response!\n")
-	log.Printf("client: status code: %d\n", res.StatusCode)
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Errorf("Error: %v", err)
+	}
 
-	log.Println(res.StatusCode)
+	lines := strings.Split(string(data), "\n")
+	for i, line := range lines {
+		if i == 0 {
+			responseFirstLine = line
+		}
+	}
 
-	// os.Exit(t.Run())
+	if responseFirstLine != expected {
+		t.Errorf("Expected %v but got %v", string(expected), string(responseFirstLine))
+	}
 }

@@ -25,17 +25,14 @@ type application struct {
 	config config
 }
 
+// testing app health endpoint
 func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "status: available")
+	fmt.Fprintln(w, "statuss: available")
 	fmt.Fprintf(w, "environment: %s\n", app.config.env)
 	fmt.Fprintf(w, "version: %s\n", version)
 }
 
-//	func stripSlashes(next http.Handler) http.Handler {
-//	  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-//	}
-//
-// func (app *application) stripSlash(next http.Handler) http.Handler {
+// strip url back slash in url
 func stripSlash(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// w.Write([]byte("OK")
@@ -51,17 +48,6 @@ func stripSlash(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
-
-// func (app *application) routes() http.Handler {
-// 	// mux := http.NewServeMux()
-// 	mux.HandleFunc("/v1/healthcheck", app.healthcheckHandler)
-//
-// 	// mux.HandleFunc("GET /{$}", app.home)
-// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		w.Header().Set("Server", "Go")
-// 		mux.ServeHTTP(w, r)
-// 	})
-// }
 
 func main() {
 	// Declare an instance of the config struct.
