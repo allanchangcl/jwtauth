@@ -5,4 +5,4 @@ run:
 	./bin/app
 
 test:
-	grc go test ./... -count=1
+	grc go test -v ./... -count=1

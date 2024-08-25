@@ -27,7 +27,7 @@ type application struct {
 
 func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "status: available")
-	// fmt.Fprintf(w, "environment: %s\n", app.config.env)
+	fmt.Fprintf(w, "environment: %s\n", app.config.env)
 	fmt.Fprintf(w, "version: %s\n", version)
 }
 
@@ -47,7 +47,7 @@ func stripSlash(next http.Handler) http.Handler {
 			r.URL.Path = newPath
 		}
 
-		fmt.Println(path)
+		// fmt.Println(path)
 		next.ServeHTTP(w, r)
 	})
 }
